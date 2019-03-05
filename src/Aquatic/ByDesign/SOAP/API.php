@@ -21,13 +21,6 @@ abstract class API
         $this->_wsdl = $wsdl;
     }
 
-    public function setCredentials(string $user, string $password/*, string $token = null*/)
-    {
-        $this->_credentials['Credentials']['Username'] = $user;
-        $this->_credentials['Credentials']['Password'] = $password;
-        //$this->_credentials['Credentials']['Token'] = $token;
-    }
-
     public function setWSDL(string $wsdl)
     {
         $this->_wsdl = $wsdl;

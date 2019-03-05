@@ -152,8 +152,9 @@ class OrderAPI extends API
         throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
     }
 
-    public function version()
+    public function version(): string
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        $result = $this->send('Version');
+        return (string) $result->VersionResult->Message;
     }
 }

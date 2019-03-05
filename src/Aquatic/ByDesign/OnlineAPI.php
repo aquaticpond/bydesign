@@ -801,7 +801,7 @@ class OnlineAPI extends API
      */
     public function version(): string
     {
-        $result = $this->send('Version', []);
+        $result = $this->send('Version');
 
         return (string) $result->VersionResult->Message;
     }

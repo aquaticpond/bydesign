@@ -2,6 +2,7 @@
 
 namespace Aquatic\ByDesign\SOAP;
 
+use Aquatic\ByDesign\Exceptions\InvalidAPICredentials;
 use \SoapClient;
 
 \ini_set("soap.wsdl_cache_enabled", "0");
@@ -39,6 +40,14 @@ abstract class API
         $soap = $this->_getSOAPClient();
         $data = array_merge($credentials, $data);
         $result = $soap->$method($data);
+
+        $property = "{$method}Result";
+
+        if (is_object($result->$property) &&
+            @$result->$property->Success == 0 &&
+            @$result->$property->Message == 'Invalid Credentials') {
+            throw new InvalidAPICredentials();
+        }
 
         return $result;
     }

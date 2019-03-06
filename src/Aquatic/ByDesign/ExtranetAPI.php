@@ -217,7 +217,7 @@ class ExtranetAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    public function getVolumeReportSPersonalDetails()
+    public function getVolumeReportPersonalDetails()
     {
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }

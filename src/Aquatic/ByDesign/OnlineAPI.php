@@ -7,9 +7,29 @@ use \BadMethodCallException;
 
 class OnlineAPI extends API
 {
-    public function addCredit()
+    /**
+     * Adds/Deletes a PaymentCredit to a customer or rep
+     *
+     * @param integer $id Customer or Rep ID
+     * @param float $amount
+     * @param int $type Credit type (see: OnlineAPI::getCreditTypes())
+     * @param string $description (optional)
+     * @param boolean $is_rep Are we mutating a representative? (optional: default false)
+     * @return Object Response
+     */
+    public function addCredit(int $id, float $amount, int $type, string $description = '', bool $is_rep = false)
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        $response = $this->send('AddCredit', [
+            'creditInput' => [
+                'RepNumber' => $is_rep ? $id : null,
+                'CustomerNumber' => $is_rep ? null : $id,
+                'CreditType' => $type,
+                'Amount' => $amount,
+                'Description' => $description,
+            ],
+        ]);
+
+        return $response->AddCreditResult;
     }
 
     public function addPersonalization()
@@ -150,9 +170,21 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
     }
 
-    public function getAvailableCredits()
+    /**
+     * Get credits available on users account
+     *
+     * @param integer $id Customer or Rep Id
+     * @param boolean $is_rep Is user customer or rep?
+     * @return float Amount of credit available
+     */
+    public function getAvailableCredits(int $id, bool $is_rep = false)
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        $response = $this->send('GetAvailableCredits', [
+            'RepNumber' => $is_rep ? $id : null,
+            'CustomerNumber' => $is_rep ? null : $id,
+        ]);
+
+        return (float) $response->GetAvailableCreditsResult->Credits;
     }
 
     public function getCountries()
@@ -165,9 +197,15 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
     }
 
+    /**
+     * Get credit types
+     *
+     * @return []CreditTypes
+     */
     public function getCreditTypes()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        $response = $this->send('GetCreditTypes');
+        return $response->GetCreditTypesResult->creditTypes->CreditType;
     }
 
     public function getCurrencyTypes()

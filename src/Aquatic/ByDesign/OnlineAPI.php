@@ -2,6 +2,7 @@
 
 namespace Aquatic\ByDesign;
 
+use Aquatic\ByDesign\Exceptions\MethodDeprecated;
 use Aquatic\ByDesign\SOAP\API;
 use \BadMethodCallException;
 
@@ -34,17 +35,17 @@ class OnlineAPI extends API
 
     public function addPersonalization()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function addRelationshipOrderDetails()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function associateOrderToMaster()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     /**
@@ -117,57 +118,57 @@ class OnlineAPI extends API
 
     public function createBackOfficeProfileNote()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function createCustomer()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function createCustomerPasswordResetKey()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function createManualPayoutAdjustment()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function createMasterOrder()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function createOnlineCustomer()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function createOnlineOrder()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function createOnlineSignup()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function createOrder()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function createRep()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function generateAR()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     /**
@@ -187,14 +188,24 @@ class OnlineAPI extends API
         return (float) $response->GetAvailableCreditsResult->Credits;
     }
 
+    /**
+     * Deprecated. Please see REST API: ~/api/Admin/Country
+     *
+     * @throws MethodDeprecated
+     */
     public function getCountries()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/Admin/Country");
     }
 
+    /**
+     * Deprecated. Please see REST API: ~/api/order/Address/CountryStates
+     *
+     * @throws MethodDeprecated
+     */
     public function getCountryStates()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/order/Address/CountryStates");
     }
 
     /**
@@ -210,17 +221,17 @@ class OnlineAPI extends API
 
     public function getCurrencyTypes()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getCustomPayoutDetails()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getCustomerByGUID()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     /**
@@ -240,7 +251,7 @@ class OnlineAPI extends API
 
     public function getCustomerInfoWithShipping()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getCustomerLookup(string $email)
@@ -258,137 +269,177 @@ class OnlineAPI extends API
 
     public function getCustomerStatusTypes()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/Admin/CustomerType
+     *
+     * @throws MethodDeprecated
+     */
     public function getCustomerTypes()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/Admin/CustomerType");
     }
 
     public function getGiftCardAccounts()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getGiftCardFields()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getInventoryByCategory()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/inventory/InventoryShopping
+     *
+     * @throws MethodDeprecated
+     */
     public function getInventoryProductSearch()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/inventory/InventoryShopping");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/inventory/InventoryShopping
+     *
+     * @throws MethodDeprecated
+     */
     public function getInventoryShopping()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/inventory/InventoryShopping");
     }
 
     public function getInventorySignup()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/inventory/InventoryShopping
+     *
+     * @throws MethodDeprecated
+     */
     public function getInventorySingleItem()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/inventory/InventoryShopping");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/Admin/Locale
+     *
+     * @throws MethodDeprecated
+     */
     public function getLocales()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/Admin/Locale");
     }
 
     public function getLocalesByShipCountry()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getMiscFieldValue()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getMiscFields()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getPayOutAdjustmentTypes()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getPayoutMethods()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getPersonalizations()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/admin/rankType
+     *
+     * @throws MethodDeprecated
+     */
     public function getRankTypes()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/admin/rankType");
     }
 
     public function getRelationshipDetails()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getRepByGUID()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getRepCodedUplineInfo()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getRepCustomers()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/user/rep
+     *
+     * @throws MethodDeprecated
+     */
     public function getRepInfo()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/user/rep");
     }
 
     public function getRepPassword()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getRepPayoutMethod()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function getRepPrefPlacement()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/admin/repType
+     *
+     * @throws MethodDeprecated
+     */
     public function getRepTypes()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/admin/repType");
     }
 
     public function getRepUpline()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     /**
@@ -414,362 +465,377 @@ class OnlineAPI extends API
 
     public function moveCustomerToNewRep()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderAddItem()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderAddItemByPriceType()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderAddMultipleItems()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderAutoshipAddItem()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderAutoshipClearItem()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/order/OnlineOrder/Clear
+     *
+     * @throws MethodDeprecated
+     */
     public function onlineOrderAutoshipClearItems()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/order/OnlineOrder/Clear");
     }
 
     public function onlineOrderAutoshipGetItems()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderAutoshipSetDate()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderClearItem()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderClearItems()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderDeleteDraftOrder()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderGetDraftOrdersMaster()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderGetItems()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderGetShipMethods()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderGetSubOrdersMaster()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderGetTotals()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderGetTotalsMaster()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderGetWeight()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderSetShippingOverride()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderSubmitOrderMaster()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderUpdateCreditAmount()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderUpdateCreditAmountMaster()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderUpdateCustomerID()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderUpdateItem()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderUpdateShipMethod()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderUpdateShipMethodGetTotals()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function partySearchCompletionGetPartyDescriptions()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function partySearchCompletionGetPartyGuests()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function partySearchCompletionGetPartyHostess()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function partySearchCompletionGetPartyIds()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentACH()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentACHInternational()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentBankDeposit()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentCash()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentCheckDraft()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentCreditCard()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentCreditCardTransactionInfo()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentCreditCardMaster()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentCustom()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentDebitCard()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentRealtimeECheck()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentTokenized()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentTokenizedRequestAdyen()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentTokenizedRequestCybersource()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentTokenizedStore()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentTokenizedVerifyResponseAdyen()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentTokenizedVerifyResponseCybersource()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function paymentTokenizedDeclined()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function processGiftCard()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function seamlessExtranetLoginCustome()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function seamlessExtranetLoginRep()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/users/customer/sendPasswordReset
+     *
+     * @throws MethodDeprecated
+     */
     public function sendCustomerPasswordReset()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/users/customer/sendPasswordReset");
     }
 
     public function setCoApplicant()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function setCustomerType()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function setMiscFieldValue()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function setSignupPlacement()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function transcardSignup()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updateAttributes()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updateCustomPayoutMethodDetailsForRep()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updateCustomerInfo()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updateCustomerInfoWithShipping()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/users/customer/createPassword
+     *
+     * @throws MethodDeprecated
+     */
     public function updateCustomerPassword()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/users/customer/createPassword");
     }
 
     public function updateOnlineCustomer()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updateOnlineOrderAddress()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updateOnlineOrderAddressByProfile()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updateOnlineSignup()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updatePassword()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updateRepInfo()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updateRepPayoutMethodInfo()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function updateRepPrefPlacement()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function upgradeCustomer()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     /**
@@ -819,17 +885,17 @@ class OnlineAPI extends API
 
     public function validateRoutingNumber()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function verifyCustomerNumber()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function verifyRepNumber()
     {
-        throw new BadMethodCallException(__METHOD__+" has not been implemented yet.");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     /**

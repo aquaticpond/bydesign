@@ -3,6 +3,7 @@
 namespace Aquatic\ByDesign;
 
 use Aquatic\ByDesign\Exceptions\MethodDeprecated;
+use Aquatic\ByDesign\Model\Customer;
 use Aquatic\ByDesign\SOAP\API;
 use \BadMethodCallException;
 
@@ -33,9 +34,25 @@ class OnlineAPI extends API
         return $response->AddCreditResult;
     }
 
-    public function addPersonalization()
+    /**
+     * For a given order detail ID, this method will add a personalization text to the detail item.
+     *
+     * @param integer $id Item ID
+     * @param string $text Personalization text
+     * @param boolean $is_online Is the order an OnlineOrder or a placed Order
+     * @param integer $order Order in which to display personalization
+     * @return Object Response
+     */
+    public function addPersonalization(int $id, string $text, bool $is_online = true, int $order = 0)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('AddPersonalization', [
+            'DetailID' => $id,
+            'Classification' => $is_online ? 'OnlineOrder' : 'Order',
+            'Personalization' => $text,
+            'Sequence' => $order,
+        ]);
+
+        return $result->AddPersonalizationResult;
     }
 
     public function addRelationshipOrderDetails()
@@ -43,9 +60,23 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    public function associateOrderToMaster()
+    /**
+     * When using master orders, this will allow tying an online order id to the parent master order id.
+     *
+     * @param integer $master_order_id
+     * @param integer $online_order_id
+     * @param boolean $add_or_remove FALSE = Remove association, TRUE = Add association (default: TRUE)
+     * @return bool Success or failure
+     */
+    public function associateOrderToMaster(int $master_order_id, int $online_order_id, bool $add_or_remove = true)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('AssociateOnlineOrderToMaster', [
+            'MasterOrderID' => $master_order_id,
+            'OnlineOrderID' => $online_order_id,
+            'AssociationType' => $add_or_remove ? 'Add' : 'Remove',
+        ]);
+
+        return (bool) $result->AssociateOnlineOrderToMasterResult;
     }
 
     /**
@@ -116,34 +147,194 @@ class OnlineAPI extends API
         return (bool) $result->CheckRepURLResult;
     }
 
-    public function createBackOfficeProfileNote()
+    /**
+     * Post a static, non-critical note without any category
+     * or type selections in the Freedom Back office profile page of a rep or customer
+     *
+     * @param integer $customer_id
+     * @param string $subject
+     * @param string $message
+     * @param boolean $is_rep Are they a rep or a normal customer
+     * @param array $options Array containing optional 'correspondence_type_id', 'category_id', 'order_id'
+     * @return Object Response
+     */
+    public function createBackOfficeProfileNote(int $customer_id, string $subject, string $message, bool $is_rep = false, array $options = [])
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+
+        $result = $this->send('CreateBackOfficeProfileNote', [
+            'ProfileNote' => [
+                'RepOrCustomer' => $is_rep ? 0 : 1,
+                'IDNumber' => $customer_id,
+                'Subject' => $subject,
+                'Message' => $message,
+
+                /**
+                 * Correspondence Types are utilized as a way of identifying the method of correspondence
+                 * used to generate a note within the system. This is displayed as Type on note creation/edit
+                 * on all user generated and populated notes in the Freedom Back Office
+                 *
+                 * https://backoffice.bydesign.com/crunchi/Admin/CorrespondenceType
+                 */
+                'CorrespondenceTypeID' => @$options['correspondence_type_id'],
+                'CategoryID' => @$options['category_id'],
+                'OrderID' => @$options['order_id'],
+            ],
+        ]);
+
+        return $result->CreateBackOfficeProfileNoteResult;
     }
 
-    public function createCustomer()
+    /**
+     * Once all items related to custom creation are completed,
+     * one can use this method to finalized the customer creation
+     * process. Note: For most of our clients, one can call this
+     * immediately after calling CreateOnlineCustomer.
+     *
+     * @param integer $id OnlineCustomer ID
+     * @param integer $referrer DID of referring customer, not referring rep (optional)
+     * @return integer ID of created customer
+     */
+    public function createCustomer(int $id, int $referrer = null)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('CreateCustomer', [
+            'OnlineCustomerID' => $id,
+            'ReferCustomerDID' => $referrer,
+        ]);
+
+        return (int) $result->CreateCustomerResult;
     }
 
-    public function createCustomerPasswordResetKey()
+    /**
+     * Use this API for generating a new password reset key for
+     * a given customer. This can be used in case the client
+     * uses their own AutoResponder system.
+     *
+     * @param mixed $id_or_email Customer ID or Email Address
+     * @return Object Result
+     */
+    public function createCustomerPasswordResetKey($id_or_email)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('CreateCustomerPasswordResetKey', [
+            'Request' => [
+                'EmailAddressOrCustomerDID' => $id_or_email,
+            ],
+        ]);
+
+        return $result->CreateCustomerPasswordResetKeyResult;
     }
 
-    public function createManualPayoutAdjustment()
+    /**
+     * Allows the uploading of PayOut Adjustments through API.
+     *
+     * @param integer $rep_id
+     * @param integer $adjustment_type Type ID corresponding to types fount from OnlineApi::getPayoutAdjustmentTypes()
+     * @param float $amount
+     * @param string $datetime Datetime of adjustment
+     * @param string $reason Note for adjustment
+     * @return Object
+     */
+    public function createManualPayoutAdjustment(int $rep_id, int $adjustment_type, float $amount, string $datetime, string $reason = '')
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('CreateManualPayoutAdjustment', [
+            'Request' => [
+                'RepDID' => $rep_id,
+                'AdjustmentTypeID' => $adjustment_type,
+                'Amount' => $amount,
+                'Reason' => $reason,
+                'AdjustmentDate' => $datetime,
+            ],
+        ]);
+
+        return $result->CreateManualPayoutAdjustmentResult;
     }
 
+    /**
+     * A master order is an order which holds other orders.
+     * This is like creating a party order without actually
+     * holding a party. Once a master order is created, one
+     * can assign other orders into the master order.
+     *
+     * For further information on Master Orders,
+     * it is suggested to contact ByDesign.
+     *
+     * @return int Master Order ID
+     */
     public function createMasterOrder()
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('CreateMasterOrder');
+        return (int) $result->CreateMasterOrderResult;
     }
 
-    public function createOnlineCustomer()
+    /**
+     * This method allows one to create a temporary customer. In most instances,
+     * the returned Online Customer ID can be instantly used to create a permanent
+     * customer (see CreateCustomer). However, for some companies, a beginning order
+     * is sometimes created upon the customer creation. This can be done much like
+     * a rep signup process with an initial order creation.
+     *
+     * @param Customer $customer
+     * @param string $password
+     * @param integer $referrer Customer referrer, not rep referrer (optional)
+     * @return int OnlineCustomer ID
+     */
+    public function createOnlineCustomer(Customer $customer, string $password, int $referrer = null)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('CreateOnlineCustomer', [
+            /**
+             * ReferCustomerDID and RepNumber are not the same thing.
+             * Either a customer does the referral (ReferCustomerDID)
+             * or a rep does the referral (OnlineCustomerRecord.RepNumber) upon enrollment.
+             * The customer referral is currently disabled.
+             *
+             * https://admin.bydesign.com/{your_company}/admin/SettingsWizard.asp?SearchTerm=X2_NEWCUSTOMER_SHOW_REFERCUST
+             *
+             * DID = Display ID -> not to be confused with actual Identification Digit.
+             * They are separate ID tables one allows numeric values , the other alphanumeric.
+             * Sometimes used to have multiple entities for one REP or Customer. Some clients
+             * prefer to have a numeric value, others may want to use alpha. Ex, Rep 1 or Rep US1
+             *
+             */
+            'ReferCustomerDID' => $referrer,
+
+            'OnlineCustomerRecord' => [
+                'RepNumber' => $customer->rep_number,
+                'Firstname' => $customer->first_name,
+                'Lastname' => $customer->last_name,
+                'Email' => $customer->email_address,
+                'Company' => $customer->company,
+                'BillStreet1' => $customer->billing_address->street,
+                'BillStreet2' => $customer->billing_address->street2,
+                'BillCity' => $customer->billing_address->city,
+                'BillState' => $customer->billing_address->state,
+                'BillPostalCode' => $customer->billing_address->post_code,
+                'BillCounty' => $customer->billing_address->county,
+                'BillCountry' => $customer->billing_address->country,
+                'ShipStreet1' => $customer->shipping_address->street,
+                'ShipStreet2' => $customer->shipping_address->street2,
+                'ShipCity' => $customer->shipping_address->city,
+                'ShipState' => $customer->shipping_address->state,
+                'ShipPostalCode' => $customer->shipping_address->post_code,
+                'ShipCounty' => $customer->shipping_address->county,
+                'ShipCountry' => $customer->shipping_address->country,
+                'TaxID' => $customer->tax_id,
+                'Phone1' => $customer->phone_number,
+                'Phone2' => '',
+                'Phone3' => '',
+                'Phone4' => '',
+                'Phone5' => '',
+                'Phone6' => '',
+                'Password' => $password,
+                'CustomerTypeID' => $customer->type_id,
+                'StatusTypeID' => $customer->status_type_id,
+                'IPAddress' => $customer->ip_address,
+                'PreferredCulture' => $customer->preferred_culture,
+                'BCNumber' => $customer->bc_number,
+                'ReferralMarketTypeInput' => $customer->referral_market_type_input,
+                'ReferralMarketTypeID' => $customer->referral_market_type_id,
+            ],
+        ]);
+
+        return (int) $result->CreateOnlineCustomerResult;
     }
 
     public function createOnlineOrder()
@@ -357,9 +548,16 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+    /**
+     * Returns a data set of the PayOut Adjustment types by Description.
+     *
+     * @return []PayoutAdjustmentType
+     */
     public function getPayOutAdjustmentTypes()
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('GetPayOutAdjustmentTypes');
+
+        return $result->GetPayOutAdjustmentTypesResult;
     }
 
     public function getPayoutMethods()

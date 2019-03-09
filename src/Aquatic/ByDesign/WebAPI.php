@@ -6,6 +6,7 @@ use Aquatic\ByDesign\Model\Country;
 use Aquatic\ByDesign\Model\CustomerType;
 use Aquatic\ByDesign\Model\OrderStatus;
 use Aquatic\ByDesign\Model\PartyStatus;
+use Aquatic\ByDesign\Model\RepType;
 use GuzzleHttp\Client as GuzzleClient;
 
 class WebAPI
@@ -163,6 +164,33 @@ class WebAPI
                 $status->IsOfficialShipped,
                 $status->IsOfficialEntered,
                 $status->OrderDetailStatusID,
+            );
+        }
+
+        return $results;
+    }
+
+    /**
+     * Get valid rep types
+     *
+     * @return []RepType
+     */
+    public function getRepTypes(): array
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/admin/repType')
+            ->getBody()
+            ->getContents();
+
+        $results = [];
+        foreach (\json_decode($json) as $type) {
+            $results[] = new RepType(
+                $type->ID,
+                $type->Description,
+                $type->Abbreviation,
+                $type->OrderType,
+                $type->AutoShipOrderType,
+                $type->IsDefault
             );
         }
 

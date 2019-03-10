@@ -4,6 +4,7 @@ namespace Aquatic\ByDesign;
 
 use Aquatic\ByDesign\Model\Country;
 use Aquatic\ByDesign\Model\CustomerType;
+use Aquatic\ByDesign\Model\Geocode;
 use Aquatic\ByDesign\Model\OrderStatus;
 use Aquatic\ByDesign\Model\PartyStatus;
 use Aquatic\ByDesign\Model\RepType;
@@ -195,5 +196,27 @@ class WebAPI
         }
 
         return $results;
+    }
+
+    /**
+     * Lists valid cities, states and counties for a given zip code
+     *
+     * @param string $post_code
+     * @return []Geocode
+     */
+    public function geocode(string $post_code)
+    {
+        $json = $this->_guzzle
+            ->request(
+                'GET',
+                '/crunchi/api/order/Address/GeocodeAddress',
+                ['query' => ['postalCode' => $post_code]]
+            )
+            ->getBody()
+            ->getContents();
+
+        $geocode = \json_decode($json);
+
+        return new Geocode($geocode->Cities, $geocode->States, $geocode->Counties);
     }
 }

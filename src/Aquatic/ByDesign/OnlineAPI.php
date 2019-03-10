@@ -328,6 +328,8 @@ class OnlineAPI extends API
                 'StatusTypeID' => $customer->status_type_id,
                 'IPAddress' => $customer->ip_address,
                 'PreferredCulture' => $customer->preferred_culture,
+
+                // Unique to customer type
                 'BCNumber' => $customer->bc_number,
                 'ReferralMarketTypeInput' => $customer->referral_market_type_input,
                 'ReferralMarketTypeID' => $customer->referral_market_type_id,
@@ -337,14 +339,76 @@ class OnlineAPI extends API
         return (int) $result->CreateOnlineCustomerResult;
     }
 
-    public function createOnlineOrder()
+    /**
+     * Undocumented function
+     *
+     * @param array $params
+     * @param [Customer] $customer
+     * @return integer Online Order ID
+     */
+    public function createOnlineOrder(array $params, Customer $customer): int
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('CreateOnlineOrder_V2', [
+            'RepNumber' => '',
+
+        ]);
     }
 
-    public function createOnlineSignup()
+    /**
+     * This method is step #1 in creating a representative. Essentially, an online
+     * signup is a temporary record that holds a potential representatives information.
+     * One can enter the below information for a potential representative and create a
+     * signup order to go alone with it. There are other methods that one can use in
+     * order to finish creating a representative such as CreateRep, but it is strongly
+     * suggested to look through most methods in this webservice prior to attempting to
+     *  create a representative.
+     *
+     * @return int ID of representative
+     */
+    public function createOnlineSignup(Customer $customer, string $password): int
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('CreateOnlineSignup_v2', [
+            'OnlineSignupRecordv2' => [
+                'SponsorRepNumber' => $customer->rep_number,
+
+                'Firstname' => $customer->first_name,
+                'Lastname' => $customer->last_name,
+                'Email' => $customer->email_address,
+                'Company' => $customer->company,
+                'BillStreet1' => $customer->billing_address->street,
+                'BillStreet2' => $customer->billing_address->street2,
+                'BillCity' => $customer->billing_address->city,
+                'BillState' => $customer->billing_address->state,
+                'BillPostalCode' => $customer->billing_address->post_code,
+                'BillCounty' => $customer->billing_address->county,
+                'BillCountry' => $customer->billing_address->country,
+                'ShipStreet1' => $customer->shipping_address->street,
+                'ShipStreet2' => $customer->shipping_address->street2,
+                'ShipCity' => $customer->shipping_address->city,
+                'ShipState' => $customer->shipping_address->state,
+                'ShipPostalCode' => $customer->shipping_address->post_code,
+                'ShipCounty' => $customer->shipping_address->county,
+                'ShipCountry' => $customer->shipping_address->country,
+                'TaxID' => $customer->tax_id,
+                'TaxID2' => $customer->tax_id2,
+                'Phone1' => $customer->phone_number,
+                'Phone2' => '',
+                'Phone3' => '',
+                'Phone4' => '',
+                'Password' => $password,
+                'RepTypeID' => $customer->type_id,
+                'IPAddress' => $customer->ip_address,
+                'PreferredCulture' => $customer->preferred_culture,
+
+                // Unique to rep type
+                'ReplicatedURL' => $customer->replicated_url,
+                'ReplicatedText' => $customer->replicated_text,
+                'DateOfBirth' => $customer->date_of_birth,
+                'PayoutMethodID' => $customer->payout_method_id,
+            ],
+        ]);
+
+        return $result->CreateOnlineSignup_v2Result;
     }
 
     public function createOrder()
@@ -352,9 +416,26 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    public function createRep()
+    /**
+     * Once a online signup is created and all items related to the signup are completed,
+     * one can submit the online signup id to this method in order to create the finalized
+     * representative. This method will return -1 for an invalid creation, or the actual
+     * RepDID of the finalized representative.
+     *
+     * The purpose of the new version of this API is to provide the ability to provide
+     * the user with a success/fail message and to install more useful and consumable
+     * error handling.
+     *
+     * @param integer $online_signup_id
+     * @return integer
+     */
+    public function createRep(int $online_signup_id)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('CreateRep_V2', [
+            'OnlineSignupID' => $online_signup_id,
+        ]);
+
+        return $result->CreateRep_V2Result;
     }
 
     public function generateAR()
@@ -562,7 +643,9 @@ class OnlineAPI extends API
 
     public function getPayoutMethods()
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('GetPayoutMethods');
+
+        return $result->GetPayoutMethodsResult;
     }
 
     public function getPersonalizations()

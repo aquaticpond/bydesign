@@ -6,14 +6,45 @@ use Aquatic\ByDesign\Model\Address;
 
 class Customer
 {
+    /**
+     * ID of representative. If Customer is a rep, is is the ID of their parent rep
+     *
+     * @var int
+     */
     public $rep_number;
+
     public $first_name;
     public $last_name;
     public $company;
     public $billing_address;
     public $shipping_address;
     public $tax_id;
+
+    /**
+     * Reps have 2 tax ids
+     *
+     * @var ?
+     */
+    public $tax_id2;
+
+    /**
+     * Primary phone number;
+     * Customers have 6 slots in API
+     * Reps have 4 slots in API
+     *
+     * @todo: Verify no customer actually has more than one phone or implement multiple phone numbers
+     *
+     * @var string
+     */
     public $phone_number;
+
+    // Rep specific properties
+    public $replicated_url;
+    public $replicated_text;
+    public $date_of_birth;
+    public $payout_method_id;
+    // end rep specific properties
+
     public $password;
     public $email_address;
     public $type_id;

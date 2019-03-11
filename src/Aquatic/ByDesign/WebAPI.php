@@ -4,6 +4,7 @@ namespace Aquatic\ByDesign;
 
 use Aquatic\ByDesign\Model\Country;
 use Aquatic\ByDesign\Model\Customer;
+use Aquatic\ByDesign\Model\CustomerNoteCategory;
 use Aquatic\ByDesign\Model\CustomerType;
 use Aquatic\ByDesign\Model\Geocode;
 use Aquatic\ByDesign\Model\Locale;
@@ -480,4 +481,30 @@ class WebAPI
         return \json_decode($json);
     }
 
+    /**
+     * Returns a list of Customer Note Categories
+     *
+     * @return []CustomerNoteCategory
+     */
+    public function getCustomerNoteCategories(): array
+    {
+        $json = $this->_guzzle
+            ->request('GET', 'crunchi/api/Admin/CustomerNoteCategory')
+            ->getBody()
+            ->getContents();
+
+        $categories = [];
+        foreach (\json_decode($json) as $category) {
+            $categories[] = new CustomerNoteCategory(
+                $category->ID,
+                $category->Description,
+                $category->SortOrder,
+                $category->IsActive,
+                $category->IsCancelAutoship,
+                $category->ShowOnExtranet
+            );
+        }
+
+        return $categories;
+    }
 }

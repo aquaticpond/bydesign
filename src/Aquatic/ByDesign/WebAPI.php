@@ -3,6 +3,7 @@
 namespace Aquatic\ByDesign;
 
 use Aquatic\ByDesign\Model\Country;
+use Aquatic\ByDesign\Model\Customer;
 use Aquatic\ByDesign\Model\CustomerType;
 use Aquatic\ByDesign\Model\Geocode;
 use Aquatic\ByDesign\Model\OrderStatus;
@@ -218,5 +219,56 @@ class WebAPI
         $geocode = \json_decode($json);
 
         return new Geocode($geocode->Cities, $geocode->States, $geocode->Counties);
+    }
+
+    public function createCustomer(Customer $customer, bool $agreed_to_terms = false, bool $send_autoresponder = true)
+    {
+        $params = [
+            'FirstName' => $customer->first_name,
+            'LastName' => $customer->last_name,
+            'Email' => $customer->email_address,
+            'Password' => $customer->password,
+            'RepDID' => $customer->rep_number,
+            'Company' => $customer->company,
+            'Phone1' => $customer->phone_number,
+            'Phone2' => '',
+            'Phone3' => '',
+            'Phone4' => '',
+            'ShippingStreet1' => $customer->shipping_address->street,
+            'ShippingStreet2' => $customer->shipping_address->street2,
+            'ShippingCountry' => $customer->shipping_address->country,
+            'ShippingPostalCode' => $customer->shipping_address->post_code,
+            'ShippingCity' => $customer->shipping_address->city,
+            'ShippingState' => $customer->shipping_address->state,
+            'ShippingCounty' => $customer->shipping_address->county,
+            'BillingStreet1' => $customer->billing_address->street,
+            'BillingStreet2' => $customer->billing_address->street2,
+            'BillingCountry' => $customer->billing_address->country,
+            'BillingPostalCode' => $customer->billing_address->post_code,
+            'BillingCity' => $customer->billing_address->city,
+            'BillingState' => $customer->billing_address->state,
+            'BillingCounty' => $customer->billing_address->county,
+            'AgreedToTerms' => $agreed_to_terms,
+            'ReferralMarketType' => $customer->referral_market_type_id,
+            'ReferralMarketTypeInput' => $customer->referral_market_type_input,
+            'ReferCustomerID' => $customer->rep_number,
+            'TaxID' => $customer->tax_id,
+            'TaxID2' => $customer->tax_id2,
+            'ReplicatedSiteUrl' => $customer->replicated_url,
+            'CustomerType' => $customer->type_id,
+            'SendAutoresponders' => $send_autoresponder,
+            'DateOfBirth' => $customer->date_of_birth,
+        ];
+
+        $json = $this->_guzzle
+            ->request(
+                'POST',
+                '/crunchi/api/users/customer',
+                ['json' => $params]
+            )
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
     }
 }

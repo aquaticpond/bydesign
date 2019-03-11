@@ -6,8 +6,10 @@ use Aquatic\ByDesign\Model\Country;
 use Aquatic\ByDesign\Model\Customer;
 use Aquatic\ByDesign\Model\CustomerType;
 use Aquatic\ByDesign\Model\Geocode;
+use Aquatic\ByDesign\Model\Locale;
 use Aquatic\ByDesign\Model\OrderStatus;
 use Aquatic\ByDesign\Model\PartyStatus;
+use Aquatic\ByDesign\Model\Rank;
 use Aquatic\ByDesign\Model\RepType;
 use GuzzleHttp\Client as GuzzleClient;
 
@@ -279,7 +281,7 @@ class WebAPI
 
     /**
      * Send customer a password reset email
-     * @todo: this doesnt actually seem to send an email
+     * @todo: test email actually gets sent because staging ARs are disabled
      *
      * @param integer $customer_id
      * @param string $language (optional: default en-us)
@@ -300,6 +302,15 @@ class WebAPI
         return \json_decode($json);
     }
 
+    /**
+     * Send rep/advocate a password reset email
+     * @todo: test email actually gets sent because staging ARs are disabled
+     *
+     * @param integer $customer_id
+     * @param string $language (optional: default en-us)
+     * @param bool $use_revolution_link (optional: default false)
+     * @return Object Result Object
+     */
     public function sendRepPasswordReset(int $rep_id, string $language = 'en-us', bool $use_revolution_link = false)
     {
         $query_string = \http_build_query([
@@ -315,4 +326,75 @@ class WebAPI
 
         return \json_decode($json);
     }
+
+    /**
+     * Allows you to get a list of Locales for a specific Rep or Customer.
+     *
+     * @param integer $id Customer or Rep ID
+     * @param boolean $is_rep Is it a Rep (default: false)
+     * @return []Locale
+     */
+    public function getLocales(int $id, bool $is_rep = false): array
+    {
+        $key = $is_rep ? 'RepDID' : 'CustomerDID';
+        $json = $this->_guzzle
+            ->request('GET', "/crunchi/api/Admin/Locale?{$key}={$id}")
+            ->getBody()
+            ->getContents();
+
+        $locales = [];
+        foreach (\json_decode($json) as $locale) {
+            $locales[] = new Locale(
+                $locale->ID,
+                $locale->Description,
+                $locale->ISODescription,
+                $locale->LocaleASP,
+                $locale->Active,
+                $locale->IsDefault,
+                $locale->IsDecimalUsed,
+                $locale->DecimalValue
+            );
+        }
+
+        return $locales;
+    }
+
+    /**
+     * Returns all rank types. Accessible to BackOffice Users and Representatives.
+     *
+     * @return []Rank
+     */
+    public function getRankTypes(): array
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/admin/rankType')
+            ->getBody()
+            ->getContents();
+
+        $ranks = [];
+        foreach (\json_decode($json) as $rank) {
+            $ranks[] = new Rank($rank->ID, $rank->Description, $rank->Abbreviation);
+        }
+
+        return $ranks;
+    }
+
+    /**
+     * Get Rep/Advocate Info
+     * @todo: Testing in staging is buggy, use preexisting reps not test rep? (id: 1122, 33 seem to work in staging)
+     *
+     * @param mixed $rep_id_or_url ID or URL for rep
+     * @return void
+     */
+    public function getRepInfo($rep_id_or_url)
+    {
+        $json = $this->_guzzle
+            ->request('GET', "/crunchi/api/user/rep/{$rep_id_or_url}/info")
+            ->getBody()
+            ->getContents();
+
+        // @todo: define rep model
+        return \json_decode($json);
+    }
+
 }

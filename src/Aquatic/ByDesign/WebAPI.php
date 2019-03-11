@@ -221,6 +221,14 @@ class WebAPI
         return new Geocode($geocode->Cities, $geocode->States, $geocode->Counties);
     }
 
+    /**
+     * Create new customer
+     *
+     * @param Customer $customer
+     * @param boolean $agreed_to_terms
+     * @param boolean $send_autoresponder Send the customer a ByDesign "Welcome New Customer" email
+     * @return void
+     */
     public function createCustomer(Customer $customer, bool $agreed_to_terms = false, bool $send_autoresponder = true)
     {
         $params = [
@@ -269,6 +277,7 @@ class WebAPI
             ->getBody()
             ->getContents();
 
+        // @todo: parse response when request 500 is sorted out
         return \json_decode($json);
     }
 }

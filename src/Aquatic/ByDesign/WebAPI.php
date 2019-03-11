@@ -231,7 +231,7 @@ class WebAPI
      */
     public function createCustomer(Customer $customer, bool $agreed_to_terms = false, bool $send_autoresponder = true)
     {
-        $params = [
+        $query_string = \http_build_query([
             'FirstName' => $customer->first_name,
             'LastName' => $customer->last_name,
             'Email' => $customer->email_address,
@@ -266,18 +266,53 @@ class WebAPI
             'CustomerType' => $customer->type_id,
             'SendAutoresponders' => $send_autoresponder,
             'DateOfBirth' => $customer->date_of_birth,
-        ];
+        ]);
 
         $json = $this->_guzzle
-            ->request(
-                'POST',
-                '/crunchi/api/users/customer',
-                ['json' => $params]
-            )
+            ->request('POST', "/crunchi/api/users/customer?{$query_string}")
             ->getBody()
             ->getContents();
 
         // @todo: parse response when request 500 is sorted out
+        return \json_decode($json);
+    }
+
+    /**
+     * Send customer a password reset email
+     * @todo: this doesnt actually seem to send an email
+     *
+     * @param integer $customer_id
+     * @param string $language (optional: default en-us)
+     * @return Object Result Object
+     */
+    public function sendCustomerPasswordReset(int $customer_id, string $language = 'en-us')
+    {
+        $query_string = \http_build_query([
+            'customerDID' => $customer_id,
+            'langKey' => $language,
+        ]);
+
+        $json = $this->_guzzle
+            ->request('POST', "/crunchi/api/users/customer/sendPasswordReset?{$query_string}")
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
+    }
+
+    public function sendRepPasswordReset(int $rep_id, string $language = 'en-us', bool $use_revolution_link = false)
+    {
+        $query_string = \http_build_query([
+            'repDID' => $rep_id,
+            'langKey' => $language,
+            'useRevolutionLink' => $use_revolution_link ? 'true' : 'false', //API expects stringly true...
+        ]);
+
+        $json = $this->_guzzle
+            ->request('POST', "/crunchi/api/rep/sendPasswordReset?{$query_string}")
+            ->getBody()
+            ->getContents();
+
         return \json_decode($json);
     }
 }

@@ -1054,9 +1054,18 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    public function updateCustomerInfo()
+    public function updateCustomerInfo(int $customer_id, string $email)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        trigger_error('OnlineAPI::updateCustomerInfo has not been fully implemented');
+
+        $result = $this->send('UpdateCustomerInfo', [
+            'CustomerID' => $customer_id,
+            'CustomerInfo' => [
+                'Email' => $email,
+            ],
+        ]);
+
+        return $result;
     }
 
     public function updateCustomerInfoWithShipping()

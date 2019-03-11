@@ -327,6 +327,89 @@ class WebAPI
         return \json_decode($json);
     }
 
+    public function validateCustomerPasswordResetKey(int $customer_id, string $password_reset_key)
+    {
+        $data = [
+            'CustomerDID' => $customer_id,
+            'PasswordResetKey' => $password_reset_key,
+        ];
+
+        $json = $this->_guzzle
+            ->request('POST', '/crunchi/api/users/customer/validatePasswordResetKey', ['json' => $data])
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
+    }
+
+    public function createCustomerPassword(int $customer_id, string $password, string $password_reset_key)
+    {
+        $data = [
+            'CustomerDID' => $customer_id,
+            'PasswordResetKey' => $password_reset_key,
+            'NewPassword' => $password,
+        ];
+
+        $json = $this->_guzzle
+            ->request('POST', '/crunchi/api/users/customer/createPassword', ['json' => $data])
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
+    }
+
+    /**
+     * Advocate/Representative password resetting with a reset token has not been implemented yet. There was no OnlineAPI::createCustomerPasswordResetKey equivilent for Reps.
+     * @todo: implement get password reset key for rep
+     *
+     * @param integer $rep_id
+     * @param string $password_reset_key
+     * @return void
+     */
+    public function validateRepPasswordResetKey(int $rep_id, string $password_reset_key)
+    {
+        \trigger_error("Advocate/Representative password resetting with a reset token has not been implemented yet. There was no OnlineAPI::createCustomerPasswordResetKey equivilent for Reps.", E_USER_WARNING);
+
+        $data = [
+            'RepDID' => $rep_id,
+            'PasswordResetKey' => $password_reset_key,
+        ];
+
+        $json = $this->_guzzle
+            ->request('POST', '/crunchi/api/rep/validatePasswordResetKey', ['json' => $data])
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
+    }
+
+    /**
+     * Advocate/Representative password resetting with a reset token has not been implemented yet. There was no OnlineAPI::createCustomerPasswordResetKey equivilent for Reps.
+     * @todo: implement get password reset key for rep
+     *
+     * @param integer $rep_id
+     * @param string $password
+     * @param string $password_reset_key
+     * @return void
+     */
+    public function createRepPassword(int $rep_id, string $password, string $password_reset_key)
+    {
+        \trigger_error("Advocate/Representative password resetting with a reset token has not been implemented yet. There was no OnlineAPI::createCustomerPasswordResetKey equivilent for Reps.", E_USER_WARNING);
+
+        $data = [
+            'RepDID' => $rep_id,
+            'PasswordResetKey' => $password_reset_key,
+            'NewPassword' => $password,
+        ];
+
+        $json = $this->_guzzle
+            ->request('POST', '/crunchi/api/rep/createPassword', ['json' => $data])
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
+    }
+
     /**
      * Allows you to get a list of Locales for a specific Rep or Customer.
      *

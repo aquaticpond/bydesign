@@ -507,4 +507,20 @@ class WebAPI
 
         return $categories;
     }
+
+    /**
+     * Not really sure what this is returning
+     * @todo: WTF does this return?
+     *
+     * @return []OrderTracking
+     */
+    public function getOrderTracking()
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Shipping/Order/OrderTracking')
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
+    }
 }

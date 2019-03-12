@@ -15,6 +15,7 @@ use Aquatic\ByDesign\Model\Rank;
 use Aquatic\ByDesign\Model\ReasonAreaType;
 use Aquatic\ByDesign\Model\ReasonCodeType;
 use Aquatic\ByDesign\Model\RepType;
+use Aquatic\ByDesign\Model\USPSServiceType;
 use GuzzleHttp\Client as GuzzleClient;
 
 class WebAPI
@@ -661,5 +662,32 @@ class WebAPI
             ->getContents();
 
         return \json_decode($json);
+    }
+
+    /**
+     * Get available USPS Service Types
+     *
+     * @return []USPSServiceType
+     */
+    public function getUSPSServiceTypes(): array
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Shipping/USPSServiceType')
+            ->getBody()
+            ->getContents();
+
+        $types = [];
+        foreach (\json_decode($json) as $type) {
+            $types[] = new USPSServiceType(
+                $type->ID,
+                $type->RealtimeTypeID,
+                $type->ServiceType,
+                $type->PackageSize,
+                $type->ContainerType,
+                $type->Machinable
+            );
+        }
+
+        return $types;
     }
 }

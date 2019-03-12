@@ -6,6 +6,8 @@ use Aquatic\ByDesign\Model\Address;
 
 class Customer
 {
+    public $id;
+
     /**
      * ID of representative. If Customer is a rep, is is the ID of their parent rep
      *

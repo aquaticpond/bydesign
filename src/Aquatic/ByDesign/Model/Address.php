@@ -6,6 +6,7 @@ class Address
 {
     public $first_name;
     public $last_name;
+    public $company;
     public $street;
     public $street2;
     public $city;

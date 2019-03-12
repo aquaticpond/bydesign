@@ -70,7 +70,7 @@ class WebAPI
      * States needs to be configured in
      * https://staging-backoffice.bydesign.com/crunchi/Admin/CountryState
      *
-     * @return array
+     * @return Object Result object
      */
     public function getStates(): array
     {
@@ -81,6 +81,8 @@ class WebAPI
             ->getBody()
             ->getContents();
 
+        return \json_decode($json);
+
         $results = [];
         foreach (\json_decode($json) as $country) {
             //$results[] = $country;
@@ -89,6 +91,11 @@ class WebAPI
         return $results;
     }
 
+    /**
+     * Get valid customer types
+     *
+     * @return []CustomerType
+     */
     public function getCustomerTypes(): array
     {
         $json = $this->_guzzle
@@ -176,6 +183,11 @@ class WebAPI
         return $results;
     }
 
+    /**
+     * Get available order detail statuses
+     *
+     * @return []OrderDetailStatus
+     */
     public function getOrderDetailStatuses(): array
     {
         $json = $this->_guzzle
@@ -251,7 +263,7 @@ class WebAPI
      * @param Customer $customer
      * @param boolean $agreed_to_terms
      * @param boolean $send_autoresponder Send the customer a ByDesign "Welcome New Customer" email
-     * @return void
+     * @return Object Result object
      */
     public function createCustomer(Customer $customer, bool $agreed_to_terms = false, bool $send_autoresponder = true)
     {
@@ -349,6 +361,13 @@ class WebAPI
         return \json_decode($json);
     }
 
+    /**
+     * Check that customer password reset key is still valid
+     *
+     * @param integer $customer_id
+     * @param string $password_reset_key
+     * @return Object Result Object
+     */
     public function validateCustomerPasswordResetKey(int $customer_id, string $password_reset_key)
     {
         $data = [
@@ -364,6 +383,14 @@ class WebAPI
         return \json_decode($json);
     }
 
+    /**
+     * Update customer password
+     *
+     * @param integer $customer_id
+     * @param string $password
+     * @param string $password_reset_key
+     * @return Object Result object
+     */
     public function createCustomerPassword(int $customer_id, string $password, string $password_reset_key)
     {
         $data = [
@@ -386,7 +413,7 @@ class WebAPI
      *
      * @param integer $rep_id
      * @param string $password_reset_key
-     * @return void
+     * @return Object Result object
      */
     public function validateRepPasswordResetKey(int $rep_id, string $password_reset_key)
     {
@@ -412,7 +439,7 @@ class WebAPI
      * @param integer $rep_id
      * @param string $password
      * @param string $password_reset_key
-     * @return void
+     * @return Object Result object
      */
     public function createRepPassword(int $rep_id, string $password, string $password_reset_key)
     {

@@ -722,8 +722,18 @@ class WebAPI
         return $shows;
     }
 
+    /**
+     * @todo: this
+     *
+     * @param [type] $rep
+     * @param [type] $customer
+     * @param [type] $language
+     * @param [type] $country
+     * @return void
+     */
     public function getInventoryCategories($rep, $customer, $language, $country)
     {
+        \trigger_error("getInventoryCategories not implemented yet...", E_USER_WARNING);
         $params = [
             'repDID' => $rep,
             'customerDID' => $customer,

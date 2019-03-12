@@ -7,6 +7,7 @@ use Aquatic\ByDesign\Model\Customer;
 use Aquatic\ByDesign\Model\CustomerNoteCategory;
 use Aquatic\ByDesign\Model\CustomerType;
 use Aquatic\ByDesign\Model\Geocode;
+use Aquatic\ByDesign\Model\InventoryCategoryDetail;
 use Aquatic\ByDesign\Model\Locale;
 use Aquatic\ByDesign\Model\MarketShow;
 use Aquatic\ByDesign\Model\OrderDetailStatus;
@@ -719,5 +720,48 @@ class WebAPI
         }
 
         return $shows;
+    }
+
+    public function getInventoryCategories($rep, $customer, $language, $country)
+    {
+        $params = [
+            'repDID' => $rep,
+            'customerDID' => $customer,
+            'langKey' => $language,
+            'country' => $country,
+        ];
+
+        $query_string = \http_build_query($params);
+
+        $json = $this->_guzzle
+            ->request('GET', "/crunchi/api/inventory/InventoryCategory?{$query_string}")
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
+    }
+
+    /**
+     * Get inventory categories?
+     *
+     * @return []InventoryCategoryDetails
+     */
+    public function getInventoryCategoryDetails(): array
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Inventory/InventoryCategoryDetail')
+            ->getBody()
+            ->getContents();
+
+        $details = [];
+        foreach (\json_decode($json) as $detail) {
+            $details[] = new InventoryCategoryDetail(
+                $detail->ID,
+                $detail->Description,
+                $detail->SortOrder
+            );
+        }
+
+        return $details;
     }
 }

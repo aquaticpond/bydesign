@@ -8,6 +8,7 @@ use Aquatic\ByDesign\Model\CustomerNoteCategory;
 use Aquatic\ByDesign\Model\CustomerType;
 use Aquatic\ByDesign\Model\Geocode;
 use Aquatic\ByDesign\Model\Locale;
+use Aquatic\ByDesign\Model\MarketShow;
 use Aquatic\ByDesign\Model\OrderDetailStatus;
 use Aquatic\ByDesign\Model\OrderStatus;
 use Aquatic\ByDesign\Model\PartyStatus;
@@ -689,5 +690,34 @@ class WebAPI
         }
 
         return $types;
+    }
+
+    /**
+     * Get market shows
+     *
+     * @return []MarketShow
+     */
+    public function getMarketShows(): array
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Admin/MarketShow')
+            ->getBody()
+            ->getContents();
+
+        $shows = [];
+        foreach (\json_decode($json) as $show) {
+            $shows[] = new MarketShow(
+                $show->ID,
+                $show->MarketID,
+                $show->Description,
+                $show->IsActive,
+                $show->IsAllowInPartySelection,
+                $show->ProjectedHeadCount,
+                $show->ActualHeadCount,
+                $show->SortOrder
+            );
+        }
+
+        return $shows;
     }
 }

@@ -340,18 +340,49 @@ class OnlineAPI extends API
     }
 
     /**
-     * Undocumented function
+     * Create an online order
      *
-     * @param array $params
-     * @param [Customer] $customer
+     * @param Customer $customer
+     * @param string $ip_address
+     * @param string $notes Invoice notes (optional)
+     * @param int $market_show_id ID of market show? (optional)
      * @return integer Online Order ID
      */
-    public function createOnlineOrder(array $params, Customer $customer): int
+    public function createOnlineOrder(Customer $customer, string $ip_address, string $notes = '', int $market_show_id = null)
     {
         $result = $this->send('CreateOnlineOrder_V2', [
-            'RepNumber' => '',
-
+            'RepNumber' => $customer->rep_number,
+            'OnlineSignupID' => $customer->online_signup_id, // @todo: online signup id?
+            'OnlineCustomerID' => $customer->online_customer_id, // @todo: online customer id?
+            'CustomerNumber' => $customer->id,
+            'BillFirstname' => $customer->billing_address->first_name,
+            'BillLastname' => $customer->billing_address->last_name,
+            'BillCompany' => $customer->billing_address->company,
+            'BillStreet1' => $customer->billing_address->street,
+            'BillStreet2' => $customer->billing_address->street2,
+            'BillCity' => $customer->billing_address->city,
+            'BillState' => $customer->billing_address->state,
+            'BillPostalCode' => $customer->billing_address->post_code,
+            'BillCounty' => $customer->billing_address->county,
+            'BillCountry' => $customer->billing_address->country,
+            'ShipFirstname' => $customer->shipping_address->first_name,
+            'ShipLastname' => $customer->shipping_address->last_name,
+            'ShipCompany' => $customer->shipping_address->company,
+            'ShipStreet1' => $customer->shipping_address->street,
+            'ShipStreet2' => $customer->shipping_address->street2,
+            'ShipCity' => $customer->shipping_address->city,
+            'ShipState' => $customer->shipping_address->state,
+            'ShipPostalCode' => $customer->shipping_address->post_code,
+            'Shipcounty' => $customer->shipping_address->county,
+            'ShipCountry' => $customer->shipping_address->country,
+            'ShipPhone' => $customer->shipping_address->phone_number,
+            'ContactEmail' => $customer->email_address,
+            'InvoiceNotes' => $notes,
+            'IPAddress' => $ip_address ?: $customer->ip_address,
+            'MarketShowID' => $market_show_id,
         ]);
+
+        return $result;
     }
 
     /**

@@ -83,6 +83,16 @@ class Customer
     public $referral_market_type_id;
 
     /**
+     * Online Signup ID and Online Customer ID are for when creating an online customer
+     * that hasnt been finalized yet. Should probably always just finalize the customer
+     * before trying to do anything else?
+     *
+     * @var int
+     */
+    public $online_signup_id;
+    public $online_customer_id;
+
+    /**
      * Do not auto-fill these vars
      *
      * @var array

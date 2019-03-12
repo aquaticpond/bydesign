@@ -744,7 +744,7 @@ class WebAPI
     /**
      * Get inventory categories?
      *
-     * @return []InventoryCategoryDetails
+     * @return []InventoryCategoryDetail
      */
     public function getInventoryCategoryDetails(): array
     {

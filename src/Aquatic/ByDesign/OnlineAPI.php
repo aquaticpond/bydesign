@@ -347,7 +347,7 @@ class OnlineAPI extends API
      * @param int $market_show_id
      * @param string $ip_address
      * @param string $notes Invoice notes (optional)
-     * @return integer Online Order ID
+     * @return Object CreateOnlineOrder Response
      */
     public function createOnlineOrder(Customer $customer, int $market_show_id, string $ip_address, string $notes = '')
     {

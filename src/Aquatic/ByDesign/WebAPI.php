@@ -625,4 +625,41 @@ class WebAPI
 
         return $types;
     }
+
+    /**
+     * Referral Market Types are used to indicate from where new
+     * rep heard about us. Referral Market Types are dependent of
+     * REP_REFERRAL_MARKET setting. If setting is on,
+     * Referral Market Types are available on Reps Edit Page for selection.
+     *
+     * @return Object Result Object
+     */
+    public function getReferralMarketTypes()
+    {
+        \trigger_error("WebAPI::getReferralMarketTypes is not properly tested.", E_USER_WARNING);
+
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Admin/ReferralMarketType')
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
+    }
+
+    /**
+     * Allows you to get a list of Tokenized Payment Accounts
+     *
+     * @return Object Result Object
+     */
+    public function getTokenizedPaymentAccounts()
+    {
+        \trigger_error("WebAPI::getTokenizedPaymentAccounts is not properly tested.", E_USER_WARNING);
+
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Admin/TokenizedPaymentAccount')
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
+    }
 }

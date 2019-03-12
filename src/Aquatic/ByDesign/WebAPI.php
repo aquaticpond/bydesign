@@ -12,6 +12,8 @@ use Aquatic\ByDesign\Model\OrderDetailStatus;
 use Aquatic\ByDesign\Model\OrderStatus;
 use Aquatic\ByDesign\Model\PartyStatus;
 use Aquatic\ByDesign\Model\Rank;
+use Aquatic\ByDesign\Model\ReasonAreaType;
+use Aquatic\ByDesign\Model\ReasonCodeType;
 use Aquatic\ByDesign\Model\RepType;
 use GuzzleHttp\Client as GuzzleClient;
 
@@ -570,5 +572,57 @@ class WebAPI
             ->getContents();
 
         return \json_decode($json);
+    }
+
+    /**
+     * Reason Code Types are used when creating Return Orders as well
+     * as other Administrative actions in order to give a base reason
+     * as to why something is being done.
+     *
+     * @return []ReasonCodeType
+     */
+    public function getReasonCodeTypes()
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Admin/ReasonCodeType')
+            ->getBody()
+            ->getContents();
+
+        $types = [];
+        foreach (\json_decode($json) as $type) {
+            $types[] = new ReasonCodeType(
+                $type->ID,
+                $type->Description,
+                $type->Explanation ?: '',
+                $type->IsActive,
+                $type->ReasonAreaTypeID
+            );
+        }
+
+        return $types;
+    }
+
+    /**
+     * Reason Area Types are used categorize Reason Code Types in areas of Freedom
+     *
+     * @return []ReasonAreaType
+     */
+    public function getReasonAreaTypes()
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Admin/ReasonAreaType')
+            ->getBody()
+            ->getContents();
+
+        $types = [];
+        foreach (\json_decode($json) as $type) {
+            $types[] = new ReasonAreaType(
+                $type->ID,
+                $type->Description,
+                $type->Explanation
+            );
+        }
+
+        return $types;
     }
 }

@@ -52,6 +52,7 @@ class Customer
     public $type_id;
     public $status_type_id;
     public $ip_address;
+    public $join_date;
 
     /**
      * PreferredCulture = Stands for the User Locale or Language.

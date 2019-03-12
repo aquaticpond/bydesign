@@ -3,6 +3,7 @@
 namespace Aquatic\ByDesign;
 
 use Aquatic\ByDesign\Exceptions\MethodDeprecated;
+use Aquatic\ByDesign\Model\Address;
 use Aquatic\ByDesign\Model\Customer;
 use Aquatic\ByDesign\SOAP\API;
 use \BadMethodCallException;
@@ -343,17 +344,17 @@ class OnlineAPI extends API
      * Create an online order
      *
      * @param Customer $customer
+     * @param int $market_show_id
      * @param string $ip_address
      * @param string $notes Invoice notes (optional)
-     * @param int $market_show_id ID of market show? (optional)
      * @return integer Online Order ID
      */
-    public function createOnlineOrder(Customer $customer, string $ip_address, string $notes = '', int $market_show_id = null)
+    public function createOnlineOrder(Customer $customer, int $market_show_id, string $ip_address, string $notes = '')
     {
-        $result = $this->send('CreateOnlineOrder_V2', [
-            'RepNumber' => $customer->rep_number,
-            'OnlineSignupID' => $customer->online_signup_id, // @todo: online signup id?
-            'OnlineCustomerID' => $customer->online_customer_id, // @todo: online customer id?
+        $data = [
+            'RepNumber' => $customer->rep_number, // @todo: rep number does not set advocate number?
+            'OnlineSignupID' => $customer->online_signup_id ?: 0, // @todo: online signup id is required, can i just set to 0 since null doesnt work?
+            'OnlineCustomerID' => $customer->online_customer_id ?: 0, // @todo: online customer id?
             'CustomerNumber' => $customer->id,
             'BillFirstname' => $customer->billing_address->first_name,
             'BillLastname' => $customer->billing_address->last_name,
@@ -380,7 +381,9 @@ class OnlineAPI extends API
             'InvoiceNotes' => $notes,
             'IPAddress' => $ip_address ?: $customer->ip_address,
             'MarketShowID' => $market_show_id,
-        ]);
+        ];
+
+        $result = $this->send('CreateOnlineOrder_V2', ['OnlineOrderRecord' => $data]);
 
         return $result;
     }
@@ -549,7 +552,32 @@ class OnlineAPI extends API
             'CustomerID' => $id,
         ]);
 
-        return $result->GetCustomerInfo_v4Result;
+        $_customer = $result->GetCustomerInfo_v4Result;
+        $billing = new Address([
+            'street' => $_customer->BillStreet1,
+            'street2' => $_customer->BillStreet2,
+            'city' => $_customer->BillCity,
+            'state' => $_customer->BillState,
+            'post_code' => $_customer->BillPostalCode,
+            'county' => $_customer->BillCounty,
+            'country' => $_customer->BillCountry,
+        ]);
+
+        $customer = new Customer([
+            'id' => $_customer->CustomerID,
+            'first_name' => $_customer->FirstName,
+            'last_name' => $_customer->LastName,
+            'company' => $_customer->Company,
+            'email_address' => $_customer->Email,
+            'phone_number' => $_customer->Phone1,
+            'join_date' => $_customer->JoinDate,
+            'rep_number' => $_customer->SponserRepID,
+            'type_id' => $_customer->CustomerType,
+            //'preferred_culture' => $_customer->PreferredCulture,
+            'status_type_id' => $_customer->CustStatus->CustomerStatusTypeID,
+        ], $billing);
+
+        return $customer;
     }
 
     public function getCustomerInfoWithShipping()

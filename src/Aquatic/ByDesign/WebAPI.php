@@ -9,7 +9,9 @@ use Aquatic\ByDesign\Model\CustomerType;
 use Aquatic\ByDesign\Model\Geocode;
 use Aquatic\ByDesign\Model\InventoryCategoryDetail;
 use Aquatic\ByDesign\Model\InventoryImage;
+use Aquatic\ByDesign\Model\InventoryImageType;
 use Aquatic\ByDesign\Model\InventoryProduct;
+use Aquatic\ByDesign\Model\InventoryRelationshipTypeSelectionType;
 use Aquatic\ByDesign\Model\Locale;
 use Aquatic\ByDesign\Model\MarketShow;
 use Aquatic\ByDesign\Model\OrderDetailStatus;
@@ -785,7 +787,7 @@ class WebAPI
      * @param integer $category (default: 0, show all categories)
      * @return []Product
      */
-    public function getInventoryShopping(int $customer_id, bool $is_rep = false, int $category = 2)
+    public function getInventoryShopping(int $customer_id, bool $is_rep = false, int $category = 2): array
     {
 
         $data = [
@@ -845,5 +847,76 @@ class WebAPI
         }
 
         return $products;
+    }
+
+    /**
+     * Get list of inventory relationship selection types
+     *
+     * @return []InventoryRelationshipTypeSelectionType
+     */
+    public function getInventoryRelationshipTypeSelectionTypes(): array
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Inventory/InventoryRelationshipTypeSelectionType')
+            ->getBody()
+            ->getContents();
+
+        $selection_types = [];
+        foreach (\json_decode($json) as $type) {
+            $selection_types[] = new InventoryRelationshipTypeSelectionType(
+                $type->ID,
+                $type->RelationshipTypeID,
+                $type->SelectionTypeID
+            );
+        }
+
+        return $selection_types;
+    }
+
+    /**
+     * Get list of inventory image types
+     *
+     * @return []InventoryImageType
+     */
+    public function getInventoryImageTypes(): array
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Admin/InventoryImageType')
+            ->getBody()
+            ->getContents();
+
+        $image_types = [];
+        foreach (\json_decode($json) as $type) {
+            $image_types[] = new InventoryImageType(
+                $type->ID,
+                $type->ImageKey
+            );
+        }
+
+        return $image_types;
+    }
+
+    /**
+     * Get all available Inventory Detail Tabs
+     *
+     * @return Object Result Object;
+     */
+    public function getInventoryDetailTabs()
+    {
+        $json = $this->_guzzle
+            ->request('GET', '/crunchi/api/Inventory/InventoryDetailTab')
+            ->getBody()
+            ->getContents();
+
+        $tabs = [];
+
+        \trigger_error("InventoryDetailTabs have not been mapped", E_USER_ERROR);
+        return \json_decode($json);
+
+        foreach (\json_decode($json) as $tab) {
+            $tabs[] = $tab;
+        }
+
+        return $tabs;
     }
 }

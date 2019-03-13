@@ -8,6 +8,8 @@ use Aquatic\ByDesign\Model\CustomerNoteCategory;
 use Aquatic\ByDesign\Model\CustomerType;
 use Aquatic\ByDesign\Model\Geocode;
 use Aquatic\ByDesign\Model\InventoryCategoryDetail;
+use Aquatic\ByDesign\Model\InventoryImage;
+use Aquatic\ByDesign\Model\InventoryProduct;
 use Aquatic\ByDesign\Model\Locale;
 use Aquatic\ByDesign\Model\MarketShow;
 use Aquatic\ByDesign\Model\OrderDetailStatus;
@@ -773,5 +775,75 @@ class WebAPI
         }
 
         return $details;
+    }
+
+    /**
+     * Get a list of shoppable products for a given customer/rep, category configuration
+     *
+     * @param integer $customer_id
+     * @param boolean $is_rep true == rep; false == customer; default: true
+     * @param integer $category (default: 0, show all categories)
+     * @return []Product
+     */
+    public function getInventoryShopping(int $customer_id, bool $is_rep = false, int $category = 2)
+    {
+
+        $data = [
+            'repDID' => $is_rep ? $customer_id : null,
+            'customerDID' => $is_rep ? null : $customer_id,
+            'categoryId' => $category,
+            'langKey' => 'en-us',
+            'country' => 'USA',
+            'includeChildItems' => 'false',
+        ];
+
+        $query_string = \http_build_query($data);
+
+        $json = $this->_guzzle
+            ->request('GET', "/crunchi/api/inventory/InventoryShopping?{$query_string}")
+            ->getBody()
+            ->getContents();
+
+        $products = [];
+
+        foreach (\json_decode($json) as $product) {
+            $images = [];
+            foreach ($product->Images as $image) {
+                $images[] = new InventoryImage(
+                    $image->Url,
+                    $image->AltText,
+                    $image->TitleText
+                );
+            }
+
+            $products[] = new InventoryProduct(
+                $product->InventoryID,
+                $product->ProductID,
+                $product->DisplayName,
+                $product->Price,
+                $product->CurrencyTypeID,
+                $product->Compare,
+                $product->SmallImageURL,
+                $product->LargeImageURL,
+                $product->IsFeaturedItem,
+                $product->CategoryID,
+                $product->OutOfStockMessage,
+                $product->LowStockMessage,
+                $images,
+                $product->DoNotAllowAddToCartStock,
+                $product->DoNotAllowAddToCartCountry,
+                $product->AllowBackOrder,
+                $product->GroupItemOverrideStock,
+                $product->SearchField,
+                $product->IsCartItem,
+                $product->SortOrder,
+                $product->Level,
+                $product->MasterInventoryProductID,
+                $product->AllowJSCartPurchase,
+                $product->DoNotAllowAddToCartFlagged
+            );
+        }
+
+        return $products;
     }
 }

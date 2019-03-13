@@ -20,13 +20,11 @@ class Customer
     public $company;
     public $billing_address;
     public $shipping_address;
-    public $tax_id;
 
     /**
-     * Reps have 2 tax ids
-     *
-     * @var ?
+     * TAX IDs are SSN, EIN, etc.
      */
+    public $tax_id;
     public $tax_id2;
 
     /**

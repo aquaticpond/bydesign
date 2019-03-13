@@ -10,6 +10,7 @@ use Aquatic\ByDesign\Model\Geocode;
 use Aquatic\ByDesign\Model\InventoryCategoryDetail;
 use Aquatic\ByDesign\Model\InventoryImage;
 use Aquatic\ByDesign\Model\InventoryImageType;
+use Aquatic\ByDesign\Model\InventoryPrice;
 use Aquatic\ByDesign\Model\InventoryProduct;
 use Aquatic\ByDesign\Model\InventoryRelationshipTypeSelectionType;
 use Aquatic\ByDesign\Model\Locale;
@@ -918,5 +919,62 @@ class WebAPI
         }
 
         return $tabs;
+    }
+
+    /**
+     * Get product prices for ranks
+     *
+     * @param string $product_sku
+     * @param integer $rank_id
+     * @return InventoryPrice[]
+     */
+    public function getInventoryPrice(string $product_sku, int $rank_id = 0): array
+    {
+        $query_string = \http_build_query([
+            'productID' => $product_sku,
+            'rankPriceTypeID' => $rank_id,
+        ]);
+
+        $json = $this->_guzzle
+            ->request('GET', "/crunchi/api/inventory/InventoryPrice?{$query_string}")
+            ->getBody()
+            ->getContents();
+
+        $data = \json_decode($json);
+
+        $prices = [];
+        foreach ($data as $price) {
+            $prices[] = new InventoryPrice(
+                $price->ProductID,
+                $price->RankPriceTypeID,
+                $price->Price,
+                $price->CustomerService,
+                $price->AutoShip,
+                $price->AutoshipExt,
+                $price->Customers,
+                $price->Web,
+                $price->Party,
+                $price->Signup,
+                $price->Volume,
+                $price->Volume2,
+                $price->Volume3,
+                $price->Volume4,
+                $price->OtherPrice,
+                $price->OtherPrice2,
+                $price->OtherPrice3,
+                $price->OtherPrice4,
+                $price->Compare,
+                $price->TaxableAmount,
+                $price->ShippingValue,
+                $price->ReturnPrice,
+                $price->StartDate,
+                $price->EndDate,
+                $price->MultiUnitPriceType,
+                $price->MultiUnitQtyStart,
+                $price->MultiUnitQtyEnd
+            );
+        }
+
+        return $prices;
     }
 }

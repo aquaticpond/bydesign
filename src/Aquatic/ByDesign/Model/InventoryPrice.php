@@ -7,7 +7,9 @@ class InventoryPrice
     public $product_sku;
 
     /**
-     * Combination PriceType and Rank associated with this price
+     * RankPriceTypes are an ENUM that is not accessible through any API or from
+     * the ByDesign backend, you must ask support for a RankPriceType export to get the
+     * values for this.
      *
      * @var int
      */

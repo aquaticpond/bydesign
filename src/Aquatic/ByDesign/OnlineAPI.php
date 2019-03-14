@@ -908,9 +908,15 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    public function onlineOrderGetItems()
+    public function onlineOrderGetItems(int $order_id)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('OnlineOrder_GetItems_v2', [
+            'OnlineOrderID' => $order_id,
+        ]);
+
+        \trigger_error("OnlineAPI::onlineOrderGetItems() has not had its response mapped yet.", E_USER_WARNING);
+        // @todo: map items
+        return $result;
     }
 
     public function onlineOrderGetShipMethods()

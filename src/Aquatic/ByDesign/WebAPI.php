@@ -977,4 +977,18 @@ class WebAPI
 
         return $prices;
     }
+
+    public function onlineOrderClearItems(int $order_id)
+    {
+        $query_string = \http_build_query([
+            'onlineOrderId' => $order_id,
+        ]);
+
+        $json = $this->_guzzle
+            ->request('POST', "/crunchi/api/order/OnlineOrder/Clear?{$query_string}")
+            ->getBody()
+            ->getContents();
+
+        return \json_decode($json);
+    }
 }

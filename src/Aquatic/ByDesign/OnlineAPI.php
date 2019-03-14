@@ -808,11 +808,34 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    public function onlineOrderAddItem()
+    /**
+     * Add an item to the cart, you can also use negative quantity to remove an item
+     *
+     * @param integer $order_id
+     * @param string $product_sku
+     * @param integer $quantity (default: 1)
+     * @return integer Online order item ID OR 0 if failure
+     */
+    public function onlineOrderAddItem(int $order_id, string $product_sku, int $quantity = 1): int
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('OnlineOrder_AddItem', [
+            'OnlineOrderID' => $order_id,
+            'ProductID' => $product_sku,
+            'Quantity' => $quantity,
+        ]);
+
+        return (int) $result->OnlineOrder_AddItemResult;
     }
 
+    /**
+     * This method is probably deprecated because the ShoppingInventory APIs return products
+     * that are valid for the user and the OnlineOrder *should be* smart enough to connect those
+     * prices to the user assoiated to the cart.
+     *
+     * The PriceTypes are kind of nebulous, see notes on \ByDesign\Model\InventoryPrice->rank_price_type_id
+     *
+     * @return void
+     */
     public function onlineOrderAddItemByPriceType()
     {
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
@@ -833,14 +856,9 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    /**
-     * Deprecated. See REST API: ~/api/order/OnlineOrder/Clear
-     *
-     * @throws MethodDeprecated
-     */
     public function onlineOrderAutoshipClearItems()
     {
-        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/order/OnlineOrder/Clear");
+        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
     public function onlineOrderAutoshipGetItems()
@@ -853,14 +871,31 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    public function onlineOrderClearItem()
+    /**
+     * Remove an item from an online order
+     *
+     * @param integer $order_id
+     * @param integer $order_item_id
+     * @return boolean Success or failure
+     */
+    public function onlineOrderClearItem(int $order_id, int $order_item_id): bool
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('OnlineOrder_ClearItem', [
+            'OnlineOrderID' => $order_id,
+            'OnlineOrderDetailID' => $order_item_id,
+        ]);
+
+        return (bool) $result->OnlineOrder_ClearItemResult;
     }
 
+    /**
+     * Deprecated. See REST API: ~/api/order/OnlineOrder/Clear
+     *
+     * @throws MethodDeprecated
+     */
     public function onlineOrderClearItems()
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/order/OnlineOrder/Clear");
     }
 
     public function onlineOrderDeleteDraftOrder()

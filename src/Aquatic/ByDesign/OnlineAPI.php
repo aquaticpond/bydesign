@@ -752,9 +752,19 @@ class OnlineAPI extends API
         throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/user/rep");
     }
 
-    public function getRepPassword()
+    /**
+     * Get a Reps password (lol)
+     *
+     * @param [mixed] $rep_number_or_url
+     * @return void
+     */
+    public function getRepPassword($rep_number_or_url)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        $result = $this->send('GetRepPassword', [
+            'RepNumberOrURL' => $rep_number_or_url
+        ]);
+
+        return $result;
     }
 
     public function getRepPayoutMethod()

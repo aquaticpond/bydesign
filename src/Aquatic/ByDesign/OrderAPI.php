@@ -18,9 +18,27 @@ class OrderAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    public function createInternalNote()
+    /**
+     * Create internal Note **THERE IS CURRENTLY NO API TO GET THESE BACK ONCE THEY ARE CREATED***
+     *
+     * @param integer $order_id
+     * @param integer $category_id
+     * @param integer $correspondence_type_id
+     * @param string $message
+     * @param string $subject
+     * @return Object ByDesign response
+     */
+    public function createInternalNote(int $order_id, int $category_id, int $correspondence_type_id, string $message, string $subject)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        return $this->send('CreateInternalNote', [
+            'OrderID' => $order_id,
+            'CategoryID' => $category_id,
+            'CorrespondanceTypeID' => $correspondence_type_id,
+            'Message1' => $message,
+            'Subject' => $subject,
+            'Unresolved' => false,
+            'Critical' => false
+        ]);
     }
 
     public function createReturnOrder()
@@ -93,9 +111,9 @@ class OrderAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    public function getPayments()
+    public function getPayments($order_id)
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        return $this->send('GetPayments', ['OrderID' => $order_id]);
     }
 
     public function getReasonCodeTypes()

@@ -991,4 +991,21 @@ class WebAPI
 
         return \json_decode($json);
     }
+
+    /**
+     * Get order information
+     *
+     * @param integer $order_id
+     * @return Object Order Information
+     */
+    public function getOrder(int $order_id)
+    {
+        $json = $this->_guzzle
+            ->request('GET', "/crunchi/api/order/Order/{$order_id}")
+            ->getBody()
+            ->getContents();
+
+        // @todo: map order information
+        return \json_decode($json);
+    }
 }

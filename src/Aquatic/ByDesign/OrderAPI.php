@@ -146,9 +146,20 @@ class OrderAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
-    public function setStatusVoid()
+    /**
+     * Void an order
+     *
+     * @param integer $order_id
+     * @param string $reason
+     * @return Object ByDesign SetStatusVoidResult
+     */
+    public function setStatusVoid(int $order_id, string $reason = '')
     {
-        throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
+        // @todo: map result?
+        return $this->send('SetStatusVoid', [
+            'OrderID' => $order_id,
+            'InvoiceNotes' => $reason
+        ]);
     }
 
     public function updateBillingAddress()

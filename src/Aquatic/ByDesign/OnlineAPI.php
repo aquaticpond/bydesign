@@ -1183,14 +1183,26 @@ class OnlineAPI extends API
         throw new BadMethodCallException(__METHOD__ . " has not been implemented yet.");
     }
 
+
     /**
-     * Deprecated. See REST API: ~/api/users/customer/createPassword
+     * Update the customer password with a key from OnlineAPI::createCustomerPasswordResetKey()
      *
-     * @throws MethodDeprecated
+     * @param integer $customer_id
+     * @param string $new_password
+     * @param string $password_reset_key Key provided by OnlineAPI::createCustomerPasswordResetKey()
+     * @return object Response
      */
-    public function updateCustomerPassword()
+    public function updateCustomerPassword(int $customer_id, string $new_password, string $password_reset_key)
     {
-        throw new MethodDeprecated(__METHOD__ . " has been deprecated. Please see REST API: ~/api/users/customer/createPassword");
+        $result = $this->send('UpdateCustomerPassword', [
+            'Request' => [
+                'CustomerDID' => $customer_id,
+                'PasswordResetKey' => $password_reset_key,
+                'NewPassword' => $new_password
+            ]
+        ]);
+
+        return $result;
     }
 
     public function updateOnlineCustomer()
